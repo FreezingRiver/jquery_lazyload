@@ -9,7 +9,7 @@
  * Project home:
  *   http://www.appelsiini.net/projects/lazyload
  *
- * Version:  1.8.4
+ * Version:  1.8.5
  *
  */
 (function($, window, document, undefined) {
@@ -35,7 +35,7 @@
       
             elements.each(function() {
                 var $this = $(this);
-                if (settings.skip_invisible && !$this.is(":visible")) {
+                if (settings.skip_invisible && $this.css("display") === "none") {
                     return;
                 }
                 if ($.abovethetop(this, settings) ||
@@ -75,7 +75,7 @@
 
         /* Fire one scroll event per scroll. Not one scroll event per image. */
         if (0 === settings.event.indexOf("scroll")) {
-            $container.bind(settings.event, function(event) {
+            $container.on(settings.event, function(event) {
                 return update();
             });
         }
@@ -94,7 +94,7 @@
                         settings.appear.call(self, elements_left, settings);
                     }
                     $("<img />")
-                        .bind("load", function() {
+                        .on("load", function() {
                             $self
                                 .hide()
                                 .attr("src", $self.data(settings.data_attribute))
@@ -119,7 +119,7 @@
             /* When wanted event is triggered load original image */
             /* by triggering appear.                              */
             if (0 !== settings.event.indexOf("scroll")) {
-                $self.bind(settings.event, function(event) {
+                $self.on(settings.event, function(event) {
                     if (!self.loaded) {
                         $self.trigger("appear");
                     }
@@ -128,14 +128,14 @@
         });
 
         /* Check if something appears when window is resized. */
-        $window.bind("resize", function(event) {
+        $window.on("resize", function(event) {
             update();
         });
               
         /* With IOS5 force loading images when navigating with back button. */
         /* Non optimal workaround. */
         if ((/iphone|ipod|ipad.*os 5/gi).test(navigator.appVersion)) {
-            $window.bind("pageshow", function(event) {
+            $window.on("pageshow", function(event) {
                 if (event.originalEvent.persisted) {
                     elements.each(function() {
                         $(this).trigger("appear");
@@ -145,7 +145,7 @@
         }
 
         /* Force initial check if images should appear. */
-        $(window).load(function() {
+        $(window).on("load", function() {
             update();
         });
         
@@ -171,7 +171,7 @@
         var fold;
 
         if (settings.container === undefined || settings.container === window) {
-            fold = $window.width() + $window.scrollLeft();
+            fold = $window.width() + $window[0].scrollX;
         } else {
             fold = $(settings.container).offset().left + $(settings.container).width();
         }
@@ -195,7 +195,7 @@
         var fold;
         
         if (settings.container === undefined || settings.container === window) {
-            fold = $window.scrollLeft();
+            fold = $window[0].scrollX;
         } else {
             fold = $(settings.container).offset().left;
         }
@@ -212,7 +212,7 @@
     /* Use as $("img:below-the-fold").something() or */
     /* $("img").filter(":below-the-fold").something() which is faster */
 
-    $.extend($.expr[':'], {
+    $.extend($.fn, {
         "below-the-fold" : function(a) { return $.belowthefold(a, {threshold : 0}); },
         "above-the-top"  : function(a) { return !$.belowthefold(a, {threshold : 0}); },
         "right-of-screen": function(a) { return $.rightoffold(a, {threshold : 0}); },
@@ -224,4 +224,4 @@
         "left-of-fold"   : function(a) { return !$.rightoffold(a, {threshold : 0}); }
     });
 
-})(jQuery, window, document);
+})($, window, document);
