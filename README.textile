@@ -31,6 +31,10 @@ All code licensed under the "MIT License":http://www.opensource.org/licenses/mit
 
 h1. Changelog
 
+h3. 1.8.5
+
+* Support for "Zepto.js":http://zeptojs.com/
+
 h3. 1.8.4
 
 * Support for "jQuery plugin repository":http://plugins.jquery.com/
