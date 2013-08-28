@@ -136,7 +136,9 @@
         /* Non optimal workaround. */
         if ((/iphone|ipod|ipad.*os 5/gi).test(navigator.appVersion)) {
             $window.on("pageshow", function(event) {
-                if (event.originalEvent.persisted) {
+                // if (event.originalEvent.persisted) {
+                event = event.originalEvent || event;
+                if (event.persisted) {
                     elements.each(function() {
                         $(this).trigger("appear");
                     });
