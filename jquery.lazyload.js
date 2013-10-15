@@ -161,7 +161,7 @@
         var fold;
         
         if (settings.container === undefined || settings.container === window) {
-            fold = $window.height() + $window.scrollTop();
+            fold = $window.height() + $window[0].scrollY;
         } else {
             fold = $(settings.container).offset().top + $(settings.container).height();
         }
@@ -185,7 +185,7 @@
         var fold;
         
         if (settings.container === undefined || settings.container === window) {
-            fold = $window.scrollTop();
+            fold = $window[0].scrollY;
         } else {
             fold = $(settings.container).offset().top;
         }
