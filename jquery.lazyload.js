@@ -136,7 +136,9 @@
         /* Non optimal workaround. */
         if ((/iphone|ipod|ipad.*os 5/gi).test(navigator.appVersion)) {
             $window.on("pageshow", function(event) {
-                if (event.originalEvent.persisted) {
+                // if (event.originalEvent.persisted) {
+                event = event.originalEvent || event;
+                if (event.persisted) {
                     elements.each(function() {
                         $(this).trigger("appear");
                     });
@@ -159,7 +161,7 @@
         var fold;
         
         if (settings.container === undefined || settings.container === window) {
-            fold = $window.height() + $window.scrollTop();
+            fold = $window.height() + $window[0].scrollY;
         } else {
             fold = $(settings.container).offset().top + $(settings.container).height();
         }
@@ -183,7 +185,7 @@
         var fold;
         
         if (settings.container === undefined || settings.container === window) {
-            fold = $window.scrollTop();
+            fold = $window[0].scrollY;
         } else {
             fold = $(settings.container).offset().top;
         }
